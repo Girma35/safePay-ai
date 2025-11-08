@@ -11,3 +11,4 @@ What I changed in this pass:
 - A browser-run classifier test is available at `public/mock-tests/classifier-test.html` (open in the browser and check the console).
 
 Next steps (optional): wire a full SPA router, add unit tests with a test runner, and polish components for accessibility.
+"# safePay-ai" 
