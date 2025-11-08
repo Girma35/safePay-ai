@@ -1,0 +1,25 @@
+.transactions {
+  width: 100%;
+}
+
+.transactions .card {
+  margin-bottom: 24px;
+}
+
+.transactions h4 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.transactions ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.transactions li {
+  margin-bottom: 8px;
+  color: var(--color-offwhite);
+}
+

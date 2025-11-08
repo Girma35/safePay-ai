@@ -1,0 +1,117 @@
+.wallet-login {
+  padding: 20px;
+}
+
+.wallet-login__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.wallet-login__title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-offwhite);
+}
+
+.wallet-login__description {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.wallet-login__button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wallet-login__button--primary {
+  background: var(--color-mint);
+  color: var(--color-charcoal);
+}
+
+.wallet-login__button--primary:hover:not(:disabled) {
+  background: #00c494;
+  transform: translateY(-1px);
+}
+
+.wallet-login__button--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wallet-login__button--secondary {
+  background: var(--color-softgray);
+  color: var(--color-offwhite);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wallet-login__button--secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.wallet-login__error {
+  padding: 12px;
+  background: rgba(229, 62, 62, 0.1);
+  border: 1px solid var(--color-softred);
+  border-radius: var(--radius);
+  color: var(--color-softred);
+  font-size: 14px;
+}
+
+.wallet-login__help {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.wallet-login__help a {
+  color: var(--color-mint);
+  text-decoration: none;
+}
+
+.wallet-login__help a:hover {
+  text-decoration: underline;
+}
+
+.wallet-login__privacy {
+  padding: 12px;
+  background: rgba(0, 209, 161, 0.1);
+  border: 1px solid rgba(0, 209, 161, 0.2);
+  border-radius: var(--radius);
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.wallet-login__connected {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wallet-login__address {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wallet-login__label {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.wallet-login__value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-offwhite);
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+

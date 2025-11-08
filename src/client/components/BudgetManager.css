@@ -1,0 +1,126 @@
+.budget-manager {
+  padding: 16px;
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+
+.budget-manager h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.budget-manager__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.budget-manager__item {
+  padding: 12px;
+  background: var(--color-charcoal);
+  border-radius: var(--radius-sm);
+}
+
+.budget-manager__category {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.budget-manager__status {
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.budget-manager__status--warning {
+  background: var(--color-warning);
+  color: var(--color-charcoal);
+}
+
+.budget-manager__status--exceeded {
+  background: var(--color-softred);
+  color: var(--color-offwhite);
+}
+
+.budget-manager__controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.budget-manager__input {
+  flex: 1;
+  max-width: 150px;
+}
+
+.budget-manager__alert {
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.budget-manager__alert--warning {
+  background: rgba(246, 173, 85, 0.1);
+  border: 1px solid var(--color-warning);
+  color: var(--color-warning);
+}
+
+.budget-manager__alert--exceeded {
+  background: rgba(229, 62, 62, 0.1);
+  border: 1px solid var(--color-softred);
+  color: var(--color-softred);
+}
+
+.budget-manager__add {
+  margin-top: 16px;
+}
+
+.budget-manager__select {
+  width: 100%;
+}
+
+.budget-manager__alerts {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(246, 173, 85, 0.1);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-sm);
+}
+
+.budget-manager__alerts h5 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-warning);
+}
+
+.budget-manager__alerts ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.budget-manager__alert-item {
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.budget-manager__alert-item--warning {
+  color: var(--color-warning);
+}
+
+.budget-manager__alert-item--exceeded {
+  color: var(--color-softred);
+}
+
