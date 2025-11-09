@@ -1,5 +1,6 @@
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/client/index.tsx',
@@ -24,7 +25,12 @@ module.exports = {
     ]
   },
   plugins: [
-    new Dotenv()
+    new Dotenv(),
+    new CopyPlugin({
+      patterns: [
+        { from: 'public', to: '' },
+      ],
+    }),
   ],
   devServer: {
     static: path.join(__dirname, 'public'),
@@ -40,5 +46,5 @@ module.exports = {
       }
     ]
   },
-  mode: 'development'
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development'
 };
