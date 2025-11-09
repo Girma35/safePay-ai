@@ -10,6 +10,6 @@
     "rootDir": "src",
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/server/**/*", "src/types/**/*"],
+  "exclude": ["node_modules", "src/client/**/*"]
 }
