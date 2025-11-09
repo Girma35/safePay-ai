@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { disconnectWallet } from '../services/wallet';
-import { SessionStorage } from '../utils/storage';
+import { SessionStorage, TransactionCache, EncryptionStorage } from '../utils/storage';
 
 const truncate = (s?: string) => s ? s.slice(0,6) + '…' + s.slice(-4) : '';
 
@@ -24,24 +24,22 @@ const BottomNav: React.FC = () => {
   }, []);
 
   const handleLogout = async () => {
-    // Attempt to disconnect from wallet (limited support)
-    try {
-      await disconnectWallet();
-    } catch (error) {
-      // Ignore disconnection errors
-    }
-    
-    // Clear session using SessionStorage
+    // Best-effort wallet disconnect (may be unsupported)
+    try { await disconnectWallet(); } catch {}
+
+    // Clear app session + encryption context + cached decrypted data
     SessionStorage.clearSession();
-    
-    // Reset address state
+    EncryptionStorage.clearEncryptionAddress();
+    TransactionCache.clearCache();
+
+    // Broadcast unified session change so listeners update immediately
+    try { window.dispatchEvent(new Event('safepay:session-changed')); } catch {}
+
+    // Local state reset
     setAddress(null);
-    
-    // Navigate to connect page
-    window.location.hash = '#/connect';
-    
-    // Note: Wallet disconnection must be done manually in the wallet extension
-    // as most wallets don't support programmatic disconnection
+
+    // Redirect to login (use login instead of connect for clarity)
+    window.location.hash = '#/login';
   };
 
   const LinkBtn: React.FC<{ path: string; label: string }> = ({ path, label }) => (
@@ -87,7 +85,15 @@ const BottomNav: React.FC = () => {
               <div style={{ fontSize: 13, color: 'var(--color-offwhite)' }}>Connected</div>
               <div style={{ fontSize: 12, color: 'var(--color-muted)' }}>{truncate(address)}</div>
             </div>
-            <button className="sp-btn" onClick={handleLogout}>Logout</button>
+            <button
+              className="sp-btn sp-btn-ghost"
+              onClick={handleLogout}
+              aria-label="Disconnect wallet and clear session"
+              title="Disconnect wallet and clear session"
+              style={{ borderColor: 'var(--color-softred)', color: 'var(--color-softred)' }}
+            >
+              Logout
+            </button>
           </div>
         ) : (
           <div style={{ display: 'flex', gap: 8 }}>

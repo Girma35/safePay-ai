@@ -35,6 +35,8 @@ const WalletLogin: React.FC<WalletLoginProps> = ({ onConnected }) => {
           setAddress(addr);
           SessionStorage.saveSession(addr);
           console.log('WalletLogin: Set address from getCurrentAddress');
+          // Notify app that session changed (same-tab friendly)
+          try { window.dispatchEvent(new Event('safepay:session-changed')); } catch {}
         } else {
           console.log('WalletLogin: No address from getCurrentAddress');
         }
@@ -75,6 +77,9 @@ const WalletLogin: React.FC<WalletLoginProps> = ({ onConnected }) => {
       setAddress(walletAddress);
       console.log('WalletLogin: Session saved, address set');
 
+      // Notify app that session changed (same-tab friendly)
+      try { window.dispatchEvent(new Event('safepay:session-changed')); } catch {}
+
       if (onConnected) {
         console.log('WalletLogin: Calling onConnected callback');
         onConnected(walletAddress);
@@ -111,6 +116,8 @@ const WalletLogin: React.FC<WalletLoginProps> = ({ onConnected }) => {
     SessionStorage.clearSession();
     setAddress(null);
     setError(null);
+    // Notify app that session changed (same-tab friendly)
+    try { window.dispatchEvent(new Event('safepay:session-changed')); } catch {}
     if (onConnected) {
       onConnected('');
     }

@@ -4,8 +4,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { TransactionStorage, EncryptionStorage, ClassifierStorage, BudgetStorage, SessionStorage } from '../utils/storage';
-import { connectWallet, signMessage } from '../services/wallet';
+import { TransactionStorage, EncryptionStorage, ClassifierStorage, BudgetStorage, SessionStorage, TransactionCache } from '../utils/storage';
+import { connectWallet, signMessage, disconnectWallet } from '../services/wallet';
 import { deriveKeyFromSignature } from '../utils/crypto';
 import { Transaction, Classifier } from '../types';
 import { useToast } from '../components/Toast';
@@ -149,8 +149,25 @@ const SettingsPage: React.FC = () => {
     }
   };
 
-  const handleDisconnect = () => {
+  const handleDisconnect = async () => {
+    // Best-effort wallet disconnect (may be unsupported)
+    try { 
+      await disconnectWallet(); 
+    } catch (err) {
+      // Ignore disconnection errors - not all wallets support programmatic disconnection
+      console.log('Wallet disconnection not supported or failed:', err);
+    }
+
+    // Clear app session + encryption context + cached decrypted data
     SessionStorage.clearSession();
+    EncryptionStorage.clearEncryptionAddress();
+    TransactionCache.clearCache();
+    
+    // Broadcast unified session change so listeners update immediately
+    try { 
+      window.dispatchEvent(new Event('safepay:session-changed')); 
+    } catch {}
+
     setSessionAddress(null);
     showToast('Disconnected successfully', 'success');
     setTimeout(() => {

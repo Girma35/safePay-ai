@@ -667,6 +667,11 @@ textarea::placeholder {
   input, select, textarea {
     font-size: 16px; /* Prevents zoom on iOS */
   }
+
+  /* AI Features section responsive */
+  .card[style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* Add Transaction Page Styles */

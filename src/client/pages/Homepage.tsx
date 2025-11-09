@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { Transaction } from '../types';
-import { TransactionStorage, EncryptionStorage } from '../utils/storage';
+import { TransactionStorage, EncryptionStorage, SessionStorage, TransactionCache } from '../utils/storage';
 import { calculateCategoryStats, calculateTrends, calculateSummary, formatCurrency, categoryStatsToChartData } from '../utils/analytics';
 import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -21,11 +21,35 @@ const Homepage: React.FC = () => {
 
   useEffect(() => {
     loadTransactions();
+
+    const handleSessionChange = () => {
+      const session = SessionStorage.loadSession();
+      if (!session) {
+        setTransactions([]);
+        setIsEncrypted(false);
+        setEncryptionAddress(null);
+        return;
+      }
+      // Refresh from cache/storage on login
+      TransactionCache.clearCache();
+      loadTransactions();
+    };
+    window.addEventListener('safepay:session-changed', handleSessionChange);
+    return () => window.removeEventListener('safepay:session-changed', handleSessionChange);
   }, []);
 
   const loadTransactions = async () => {
     setLoading(true);
     try {
+      // Do not show any collection when logged out
+      const session = SessionStorage.loadSession();
+      if (!session) {
+        setIsEncrypted(false);
+        setEncryptionAddress(null);
+        setTransactions([]);
+        return;
+      }
+
       const encrypted = TransactionStorage.isEncrypted();
       setIsEncrypted(encrypted);
       

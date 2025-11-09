@@ -199,6 +199,15 @@ export class TransactionCache {
     try {
       console.log('TransactionCache: Loading transaction cache...');
 
+      // Do not expose transactions when there's no active session
+      const activeSession = SessionStorage.loadSession();
+      if (!activeSession) {
+        console.log('TransactionCache: No active session, cache will be empty');
+        this.cachedTransactions = [];
+        this.cacheLoaded = true;
+        return;
+      }
+
       // Check if transactions are encrypted
       const isEncrypted = TransactionStorage.isEncrypted();
 
@@ -219,7 +228,7 @@ export class TransactionCache {
         }
 
         // Check if we have a connected wallet that matches
-        const session = SessionStorage.loadSession();
+        const session = activeSession; // already verified above
         if (!session || session.address.toLowerCase() !== encryptionAddress.toLowerCase()) {
           console.log('TransactionCache: No matching wallet session for decryption');
           this.cachedTransactions = [];

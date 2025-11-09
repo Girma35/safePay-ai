@@ -208,6 +208,7 @@ export function onAccountChange(callback: (accounts: string[]) => void): () => v
 /**
  * Attempt to disconnect from wallet (limited support)
  * Note: Most wallets don't support programmatic disconnection
+ * This function tries multiple methods to disconnect
  */
 export async function disconnectWallet(): Promise<void> {
   if (!isWeb3Available()) {
@@ -215,12 +216,32 @@ export async function disconnectWallet(): Promise<void> {
   }
 
   try {
-    // Some wallets support this method
+    // Method 1: Some wallets support this method (e.g., WalletConnect)
     if (window.ethereum?.disconnect) {
       await window.ethereum.disconnect();
+      console.log('Wallet: Disconnected via disconnect() method');
+      return;
     }
-    // MetaMask doesn't support programmatic disconnection
+
+    // Method 2: Try to close provider connection (if available)
+    if (window.ethereum?.close) {
+      await window.ethereum.close();
+      console.log('Wallet: Disconnected via close() method');
+      return;
+    }
+
+    // Method 3: Try to remove all accounts (some wallets support this)
+    try {
+      await window.ethereum.request({ method: 'wallet_revokePermissions', params: [{ eth_accounts: {} }] });
+      console.log('Wallet: Revoked permissions');
+      return;
+    } catch (err) {
+      // This method is not supported by most wallets, ignore
+    }
+
+    // Note: MetaMask and most browser extension wallets don't support programmatic disconnection
     // Users must disconnect manually from the wallet extension
+    console.log('Wallet: Programmatic disconnection not supported by this wallet');
   } catch (error) {
     // Ignore errors - disconnection is not critical
     console.log('Wallet disconnection not supported or failed:', error);

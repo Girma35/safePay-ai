@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { Transaction } from '../types';
-import { TransactionStorage, EncryptionStorage, TransactionCache } from '../utils/storage';
+import { TransactionStorage, EncryptionStorage, TransactionCache, SessionStorage } from '../utils/storage';
 import { formatCurrency, formatDate, filterByCategory, filterByType, searchTransactions, filterByDateRange } from '../utils/analytics';
 import { getExplorerUrl } from '../services/blockchain';
 import './HistoryPage.css';
@@ -47,6 +47,32 @@ const HistoryPage: React.FC = () => {
         console.error('Failed to load transaction cache:', error);
         setCacheLoading(false);
       });
+
+    const handleSessionChange = () => {
+      const session = SessionStorage.loadSession();
+      if (!session) {
+        // On logout: hide history immediately
+        setHistoryDisplayed(false);
+        setTransactions([]);
+        setIsEncrypted(false);
+        return;
+      }
+      // On new login: refresh encryption state and cache
+      const nowEncrypted = TransactionStorage.isEncrypted();
+      setIsEncrypted(nowEncrypted);
+      TransactionCache.clearCache();
+      TransactionCache.loadCache().then(() => {
+        if (!nowEncrypted) {
+          setTransactions(TransactionCache.getCachedTransactions());
+          setHistoryDisplayed(true);
+        } else {
+          setTransactions([]);
+          setHistoryDisplayed(false);
+        }
+      });
+    };
+    window.addEventListener('safepay:session-changed', handleSessionChange);
+    return () => window.removeEventListener('safepay:session-changed', handleSessionChange);
   }, []);
 
   const loadTransactions = async () => {

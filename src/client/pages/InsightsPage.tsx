@@ -6,7 +6,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Transaction } from '../types';
-import { TransactionStorage } from '../utils/storage';
+import { TransactionStorage, SessionStorage, TransactionCache } from '../utils/storage';
 import { generateInsights } from '../services/ai';
 import { calculateCategoryStats, calculateTrends, calculateSummary, formatCurrency, categoryStatsToChartData } from '../utils/analytics';
 import { detectAnomalies } from '../services/anomaly';
@@ -23,6 +23,19 @@ const InsightsPage: React.FC = () => {
 
   useEffect(() => {
     loadTransactions();
+    const handleSessionChange = () => {
+      const session = SessionStorage.loadSession();
+      if (!session) {
+        setTransactions([]);
+        setInsights([]);
+        setAnomalies([]);
+        return;
+      }
+      TransactionCache.clearCache();
+      loadTransactions();
+    };
+    window.addEventListener('safepay:session-changed', handleSessionChange);
+    return () => window.removeEventListener('safepay:session-changed', handleSessionChange);
   }, []);
 
   useEffect(() => {
@@ -40,8 +53,18 @@ const InsightsPage: React.FC = () => {
   const loadTransactions = async () => {
     setLoading(true);
     try {
+      const session = SessionStorage.loadSession();
+      if (!session) {
+        setTransactions([]);
+        return;
+      }
       const isEncrypted = TransactionStorage.isEncrypted();
-      const loaded = await TransactionStorage.loadTransactions(isEncrypted);
+      if (isEncrypted) {
+        // Do not auto-load encrypted data
+        setTransactions([]);
+        return;
+      }
+      const loaded = await TransactionStorage.loadTransactions(false);
       setTransactions(loaded);
     } catch (error) {
       console.error('Failed to load transactions:', error);
