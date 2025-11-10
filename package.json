@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc && webpack --mode production",
+    "build": "npx tsc && npx webpack --mode production",
     "build:local": "cross-env NODE_ENV=production tsc && webpack --mode production",
     "build:dev": "tsc && webpack",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
