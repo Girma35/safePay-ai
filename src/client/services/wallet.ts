@@ -4,6 +4,7 @@
  */
 
 import { ethers } from 'ethers';
+import { logger } from '../utils/logger';
 
 declare global {
   interface Window {
@@ -91,7 +92,7 @@ export async function connectWallet(): Promise<WalletProvider> {
       provider,
     };
   } catch (error: any) {
-    console.error('Wallet: Connection failed:', error);
+    logger.error('Wallet: Connection failed:', error);
 
     // Provide more specific error messages
     if (error?.code === 4001) {
@@ -122,7 +123,7 @@ export async function signMessage(message: string): Promise<string> {
     console.log('Wallet: Message signed successfully');
     return signature;
   } catch (error: any) {
-    console.error('Wallet: Message signing failed:', error);
+    logger.error('Wallet: Message signing failed:', error);
     throw error;
   }
 }

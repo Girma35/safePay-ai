@@ -20,6 +20,7 @@ import StatusBadge from './components/StatusBadge';
 import ErrorBoundary from './components/ErrorBoundary';
 import { ToastProvider } from './components/Toast';
 import { SessionStorage, TransactionCache } from './utils/storage';
+import { logger } from './utils/logger';
 
 const container = document.getElementById('root');
 if (container) {
@@ -48,7 +49,7 @@ if (container) {
 
     // Load transaction cache in background (don't await to avoid blocking render)
     TransactionCache.loadCache().catch(error => {
-      console.error('Failed to load transaction cache:', error);
+      logger.error('Failed to load transaction cache:', error);
     });
 
     // Route to appropriate page
@@ -79,5 +80,5 @@ if (container) {
   // Initial render
   render();
 } else {
-  console.error('No root element found');
+  logger.error('No root element found');
 }

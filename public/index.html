@@ -3,7 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SafePay AI</title>
+    <meta name="description" content="SafePay AI - Decentralized Financial Management with on-device AI, wallet-backed encryption, and blockchain transaction records. 100% private and secure." />
+    <meta name="keywords" content="decentralized finance, privacy, AI, expense tracking, blockchain, Web3, wallet" />
+    <meta name="author" content="SafePay AI" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SafePay AI - Decentralized Financial Management" />
+    <meta property="og:description" content="Privacy-first expense tracking with on-device AI and wallet-backed encryption" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="SafePay AI - Decentralized Financial Management" />
+    <meta name="twitter:description" content="Privacy-first expense tracking with on-device AI and wallet-backed encryption" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#00d1a1" />
+    
+    <title>SafePay AI - Decentralized Financial Management</title>
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,33 +29,12 @@
     <link rel="stylesheet" href="/styles/theme.css">
   </head>
   <body>
-    <div id="status" style="position:fixed;left:10px;top:10px;background:#000;color:#fff;padding:6px 10px;border-radius:6px;z-index:9999;font-family:sans-serif;font-size:12px;">Initializing…</div>
     <div id="root"></div>
-  <!-- webpack bundle -->
-  <script src="/bundle.js"></script>
     <noscript>
-      <div style="padding:20px;background:#fff3cd;border:1px solid #ffecb5;margin:20px;border-radius:6px;">JavaScript is disabled — SafePay AI requires JavaScript to run.</div>
+      <div style="padding:20px;background:#fff3cd;border:1px solid #ffecb5;margin:20px;border-radius:6px;text-align:center;">
+        <h2>JavaScript Required</h2>
+        <p>SafePay AI requires JavaScript to run. Please enable JavaScript in your browser settings.</p>
+      </div>
     </noscript>
-    <script>
-      // small debug helper that updates the status banner; React will overwrite #root when it mounts
-      (function(){
-        try{
-          var s = document.getElementById('status');
-          if(s) s.textContent = 'Static page loaded — waiting for app...';
-          // mark when window loads
-          window.addEventListener('load', function(){ if(s) s.textContent = 'Window loaded — waiting for bundle...'; });
-          // detect when React mounts by polling for changes inside #root
-          var root = document.getElementById('root');
-          var last = root ? root.innerHTML : null;
-          var t = setInterval(function(){
-            if(!root) return;
-            if(root.innerHTML && root.innerHTML !== last){
-              if(s) s.textContent = 'App mounted';
-              clearInterval(t);
-            }
-          }, 250);
-        }catch(e){/* ignore */}
-      })();
-    </script>
   </body>
 </html>
